@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 
 const sections = [
@@ -10,6 +11,7 @@ const sections = [
       "Yield Tokenisation: split gPAS into PT and YT.",
       "PT Strategy: lock fixed outcomes into maturity.",
       "YT Strategy: express a view on future yield.",
+      "LP Pools: provide liquidity to PT/YT/gPAS markets.",
       "Yield Trading: rotate between PT and YT positions.",
     ],
   },
@@ -55,7 +57,17 @@ const sections = [
   },
   {
     id: "stage-5",
-    title: "Stage 5 - Yield Trading",
+    title: "Stage 5 - LP Pools",
+    body: "Liquidity providers can supply PT, YT, and gPAS pools to earn fees while taking pool inventory risk.",
+    bullets: [
+      "Each swap pays a fee to the pool; LPs earn fees pro-rata to their share.",
+      "LP return is fee income minus inventory divergence from simple hold.",
+      "PT, YT, and gPAS pools can be managed actively as market conditions change.",
+    ],
+  },
+  {
+    id: "stage-6",
+    title: "Stage 6 - Yield Trading",
     body: "Advanced users can combine PT and YT positions for hedging, speculation, or inventory rotation based on yield market conditions.",
     bullets: [
       "PT-centric stance targets fixed outcomes.",

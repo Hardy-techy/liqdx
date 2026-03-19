@@ -2,6 +2,12 @@
 
 Lidqx is a yield protocol where users deposit into a vault, receive a yield-bearing position, and split that position into principal and yield components for different strategy profiles.
 
+## Why gPAS Uses Exchange-Rate Yield
+
+- gPAS does not increase token count over time.
+- Yield is reflected through exchange-rate appreciation.
+- This keeps accounting predictable for split/recombine operations with PT and YT.
+
 ## What The Project Does
 
 - Vault flow:
@@ -17,6 +23,10 @@ Lidqx is a yield protocol where users deposit into a vault, receive a yield-bear
   - Trade PT, YT, and gPAS pool exposures
   - Build fixed-vs-variable yield positions based on user risk preference
 
+- LP pools flow:
+  - Provide liquidity to PT, YT, and gPAS pools
+  - Earn fee-based LP exposure while managing pool inventory risk
+
 - Runtime + interoperability flow:
   - Use precompile-aware paths for system/native asset operations
   - Support owner-gated XCM gateway actions for advanced cross-system operations
@@ -25,7 +35,17 @@ Lidqx is a yield protocol where users deposit into a vault, receive a yield-bear
 
 - PT is for principal-focused exposure with maturity-driven behavior.
 - YT is for yield-focused exposure and upside/volatility in yield expectations.
+- LP is for market-making exposure with fee capture and inventory risk tradeoff.
 - Holding, trading, and recombining lets users move between conservative and aggressive yield views.
+
+## Protocol Stages
+
+1. Stage 1 - Vault Deposit: deposit PAS and mint gPAS.
+2. Stage 2 - Yield Tokenisation: split gPAS into PT and YT.
+3. Stage 3 - PT Strategy: take principal-oriented, maturity-aware positions.
+4. Stage 4 - YT Strategy: take yield-oriented, expectation-driven positions.
+5. Stage 5 - LP Pools: provide liquidity across PT, YT, and gPAS pools.
+6. Stage 6 - Yield Trading: rotate PT and YT exposures as market conditions change.
 
 ## End-To-End User Flow
 
@@ -70,6 +90,12 @@ npm install
 npx hardhat compile
 npm test
 ```
+
+## Repository Structure
+
+- frontend: React + Vite app for user flows, trading views, and protocol guide.
+- contracts: Hardhat workspace with Solidity contracts, deployment scripts, and tests.
+- contracts/paseo_deployments.json: deployed addresses used by frontend integrations.
 
 ## Current Scope
 
