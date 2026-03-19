@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* ─── Premium Purple DeFi Design System ─── */
+@theme {
+  /* Surface colors — deep purplish darks */
+  --color-surface-0: #080510;
+  --color-surface-1: #0c0a18;
+  --color-surface-2: #13101e;
+  --color-surface-3: #1a1528;
+
+  /* Legacy aliases (backwards compat) */
+  --color-bg-main: #080510;
+  --color-bg-card: #0c0a18;
+
+  /* Accent palette */
+  --color-accent-purple: #9333ea;
+  --color-accent-violet: #a855f7;
+  --color-accent-deep: #7c3aed;
+
+  /* Legacy aliases */
+  --color-accent-cyan: #9333ea;
+  --color-accent-blue: #7c3aed;
+
+  /* Text */
+  --color-text-main: #F1F0F5;
+  --color-text-muted: #a09bb5;
+
+  /* Font families */
+  --font-asimovian: "Inter", system-ui, sans-serif;
+  --font-saira: "Inter", system-ui, sans-serif;
+}
+
+@layer utilities {
+  /* ─── Keyframes ─── */
+  @keyframes spinPulse {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(-360deg); }
+  }
+
+  @keyframes spinPulseReverse {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  @keyframes glowingCircle {
+    0%, 100% { top: 0%; left: 0%; opacity: 0.15; }
+    50% { top: 10%; left: 10%; opacity: 0.25; }
+  }
+
+  @keyframes scrolling {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+}
+
+/* ─── Global Body ─── */
+body {
+  background: radial-gradient(ellipse at 15% -10%, rgba(147, 51, 234, 0.10), transparent 45%),
+              radial-gradient(ellipse at 85% 5%, rgba(124, 58, 237, 0.08), transparent 40%),
+              radial-gradient(ellipse at 50% 80%, rgba(168, 85, 247, 0.04), transparent 50%),
+              #080510;
+  color: #F1F0F5;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Utility Card Classes ─── */
+
+/* Standard glassmorphism card */
+.card-glass {
+  background: rgba(12, 10, 24, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-glass:hover {
+  border-color: rgba(147, 51, 234, 0.15);
+}
+
+/* Legacy alias */
+.bg-dark-transparent {
+  background: rgba(12, 10, 24, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.bg-dark-custom {
+  background: rgba(12, 10, 24, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.bg-crypto-oneclick {
+  background-color: rgba(12, 10, 24, 0.92);
+  border: 1px solid rgba(147, 51, 234, 0.15);
+}
+
+.bg-crypto-dropdown {
+  background-color: rgba(12, 10, 24, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+/* ─── Purple Text Gradient ─── */
+.text-gradient-purple {
+  background: linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080510;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 51, 234, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(147, 51, 234, 0.5);
+}
+
+/* ─── Carousel ─── */
+.carousel > * {
+  flex: 0 0 130%;
+}
+
+/* ─── Scrolling Animation ─── */
+.scrolling-group {
+  will-change: transform;
+  animation: scrolling 20s linear infinite;
+  display: flex;
+  gap: 145px;
+  padding-right: 20px;
+  width: 100%;
+}
+
+/* ─── Video Border ─── */
+.video-border {
+  border-radius: clamp(24px, 1.667vw, 64px);
+}
+
+/* ─── Hide the blinking caret ─── */
+div, p, li {
+  caret-color: transparent;
+}
+
+/* ─── Aqua-custom (Stripe banner bg) ─── */
+.bg-aqua-custom {
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+}
