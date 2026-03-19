@@ -11,10 +11,11 @@ import { formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
 
 interface TokenOption {
   coin: string;
+  icon: string;
 }
 
 const tokens: TokenOption[] = [
-  { coin: "gPAS" },
+  { coin: "gPAS", icon: "/gPAS.png" },
 ];
 
 const SplitRecombine = () => {
@@ -237,9 +238,11 @@ const SplitRecombine = () => {
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-xs font-bold text-purple-200">
-              {selectedToken.coin.slice(0, 1)}
-            </div>
+            <img
+              src={selectedToken.icon}
+              alt={selectedToken.coin}
+              className="w-10 h-10 rounded-full border border-purple-400/40 object-cover"
+            />
             <span className="text-white text-lg font-medium tracking-wide">
               {selectedToken.coin}
             </span>
@@ -264,9 +267,11 @@ const SplitRecombine = () => {
                     setIsOpen(false);
                   }}
                 >
-                  <div className="w-8 h-8 rounded-full bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-xs font-bold text-purple-200">
-                    {item.coin.slice(0, 1)}
-                  </div>
+                  <img
+                    src={item.icon}
+                    alt={item.coin}
+                    className="w-10 h-10 rounded-full border border-purple-400/40 object-cover"
+                  />
                   <span className="text-white font-medium">{item.coin}</span>
                 </div>
               ))}
@@ -290,7 +295,7 @@ const SplitRecombine = () => {
                 setAmount(next)
               }
             }}
-            className="flex-1 bg-transparent text-white text-3xl outline-none font-light placeholder-white/20"
+            className="flex-1 bg-transparent text-white text-3xl outline-none font-light placeholder-white/20 caret-white"
           />
           <div className="flex items-center gap-5 text-xs text-gray-500 mt-2">
             <span className="text-white/40">

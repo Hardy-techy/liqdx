@@ -152,7 +152,7 @@ const XcmAdminPanel = () => {
           value={gatewayAddress}
           onChange={(e) => setGatewayAddress(e.target.value.trim())}
           placeholder="0x..."
-          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40"
+          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40 caret-white"
         />
 
         <div className="text-xs text-white/60">
@@ -170,14 +170,14 @@ const XcmAdminPanel = () => {
           value={messageHex}
           onChange={(e) => setMessageHex(e.target.value.trim())}
           rows={4}
-          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40"
+          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40 caret-white"
         />
 
         <label className="text-xs text-white/60 uppercase tracking-wider">XCM Destination Hex</label>
         <input
           value={destinationHex}
           onChange={(e) => setDestinationHex(e.target.value.trim())}
-          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40"
+          className="w-full rounded-xl border border-white/10 bg-[#120f24] px-4 py-3 text-white outline-none focus:border-purple-500/40 caret-white"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">

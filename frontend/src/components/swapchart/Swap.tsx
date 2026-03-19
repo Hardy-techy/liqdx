@@ -164,23 +164,25 @@ const Swap = () => {
   const toggleTokens = () => setIsSwappingPAS(!isSwappingPAS);
 
   return (
-    <div className="flex-2 flex flex-col font-saira rounded-2xl bg-[#0d0714] border border-white/5 shadow-2xl overflow-hidden relative group">
+    <div className="flex-2 flex flex-col font-saira rounded-2xl bg-[#0d0714] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] overflow-hidden relative group">
       <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent opacity-0 group-[.scrolling-group]:opacity-100 transition-opacity pointer-events-none"></div>
       
       {/* Tabs */}
-      <div className="flex w-full border-b border-white/5 relative z-10 bg-[#120a1a]">
+      <div className="p-3 border-b border-white/10 relative z-10 bg-[#120a1a]">
+        <div className="flex w-full rounded-xl bg-black/20 border border-white/10 p-1">
         <button 
           onClick={() => setActiveTab("swap")}
-          className={`flex-1 py-4 text-center text-sm font-bold uppercase tracking-wider transition-colors ${activeTab === "swap" ? "text-purple-400 border-b-2 border-purple-500 bg-purple-500/5" : "text-white/40 hover:text-white/60"}`}
+          className={`flex-1 py-2.5 text-center text-xs font-semibold uppercase tracking-[0.18em] rounded-lg transition-all ${activeTab === "swap" ? "text-white bg-purple-500/20 border border-purple-400/30 shadow-[0_0_14px_rgba(168,85,247,0.2)]" : "text-white/55 hover:text-white hover:bg-white/5"}`}
         >
           Swap
         </button>
         <button 
           onClick={() => setActiveTab("liquidity")}
-          className={`flex-1 py-4 text-center text-sm font-bold uppercase tracking-wider transition-colors ${activeTab === "liquidity" ? "text-purple-400 border-b-2 border-purple-500 bg-purple-500/5" : "text-white/40 hover:text-white/60"}`}
+          className={`flex-1 py-2.5 text-center text-xs font-semibold uppercase tracking-[0.18em] rounded-lg transition-all ${activeTab === "liquidity" ? "text-white bg-purple-500/20 border border-purple-400/30 shadow-[0_0_14px_rgba(168,85,247,0.2)]" : "text-white/55 hover:text-white hover:bg-white/5"}`}
         >
           Add Liquidity
         </button>
+        </div>
       </div>
 
       <div className="p-8 relative z-10 flex flex-col gap-6">
@@ -190,15 +192,15 @@ const Swap = () => {
           <h2 className="text-2xl font-bold text-white tracking-wide">
             {activeTab === "swap" ? "Swap Tokens" : "Provide Liquidity"}
           </h2>
-          <span className="text-xs font-semibold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20">
+          <span className="text-xs font-semibold text-purple-200 bg-purple-500/15 px-3 py-1 rounded-full border border-purple-400/25 tracking-wide">
             Pool: {tokenSymbol} / PAS
           </span>
         </div>
 
         {activeTab === "swap" ? (
           /* SWAP UI */
-          <div className="flex flex-col gap-4 relative mt-2">
-            <div className="bg-[#1a1528]/80 rounded-2xl p-4 border border-white/5 hover:border-purple-500/20 transition-colors">
+          <div className="flex flex-col gap-3 mt-2">
+            <div className="bg-[#1a1528]/90 rounded-2xl p-4 border border-white/10 hover:border-purple-400/30 transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">You pay</span>
                 <div className="flex items-center gap-2">
@@ -218,23 +220,25 @@ const Swap = () => {
                       setAmount(next);
                     }
                   }}
-                  className="w-full bg-transparent text-white text-3xl outline-none font-light placeholder-white/20"
+                  className="w-full bg-transparent text-white text-3xl outline-none font-light placeholder-white/20 caret-white"
                 />
-                <span className="ml-4 px-3 py-1.5 bg-white/5 rounded-lg text-white font-bold tracking-widest text-sm">
+                <span className="ml-4 px-3 py-1.5 bg-black/25 border border-white/10 rounded-lg text-white font-semibold tracking-wide text-sm whitespace-nowrap">
                   {isSwappingPAS ? "PAS" : tokenSymbol}
                 </span>
               </div>
             </div>
 
-            <button
-              onClick={toggleTokens}
-              className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-[#120a1a] border border-purple-500/30 hover:border-purple-500 text-purple-400 rounded-full w-10 h-10 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.15)] z-10 transition-all hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:scale-110"
-            >
-              <i className="fa-solid fa-arrow-up-long absolute text-[10px] -translate-y-1"></i>
-              <i className="fa-solid fa-arrow-down-long absolute text-[10px] translate-y-1"></i>
-            </button>
+            <div className="flex justify-center -my-1 z-10">
+              <button
+                onClick={toggleTokens}
+                className="bg-[#120a1a] border border-purple-400/40 hover:border-purple-300 text-purple-300 rounded-full w-11 h-11 flex items-center justify-center shadow-[0_0_18px_rgba(168,85,247,0.2)] transition-all hover:shadow-[0_0_24px_rgba(168,85,247,0.32)] hover:scale-105"
+              >
+                <i className="fa-solid fa-arrow-up-long absolute text-[10px] -translate-y-1"></i>
+                <i className="fa-solid fa-arrow-down-long absolute text-[10px] translate-y-1"></i>
+              </button>
+            </div>
 
-            <div className="bg-[#1a1528]/80 rounded-2xl p-4 border border-white/5">
+            <div className="bg-[#1a1528]/70 rounded-2xl p-4 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">You receive</span>
                 <span className="text-white/40 text-xs font-medium">Bal: {!isSwappingPAS ? pasBalance.toFixed(4) : tokenBalanceNum.toFixed(4)}</span>
@@ -243,9 +247,20 @@ const Swap = () => {
                 <span className="text-white/90 text-3xl font-light">
                   {estimatedReceive > 0 ? estimatedReceive.toFixed(4) : "0.00"}
                 </span>
-                <span className="ml-4 px-3 py-1.5 bg-white/5 rounded-lg text-white font-bold tracking-widest text-sm">
+                <span className="ml-4 px-3 py-1.5 bg-black/25 border border-white/10 rounded-lg text-white font-semibold tracking-wide text-sm whitespace-nowrap">
                   {!isSwappingPAS ? "PAS" : tokenSymbol}
                 </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                <p className="text-[11px] uppercase tracking-[0.14em] text-white/45">Est. Price</p>
+                <p className="mt-1 text-sm text-white/85">1 {tokenSymbol} = {currentPrice > 0 ? currentPrice.toFixed(4) : "0.0000"} PAS</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-black/20 p-3">
+                <p className="text-[11px] uppercase tracking-[0.14em] text-white/45">Trading Fee</p>
+                <p className="mt-1 text-sm text-white/85">0.30% per swap</p>
               </div>
             </div>
 
@@ -256,7 +271,7 @@ const Swap = () => {
                   catch(e) { console.error(e) }
                 }}
                 disabled={!amtNum || hasInvalidAmountFormat || isApproving}
-                className="mt-6 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-lg font-bold tracking-wider shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
+                className="mt-2 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
                 {isApproving ? "Approving..." : "Approve Token"}
               </button>
@@ -264,7 +279,7 @@ const Swap = () => {
               <button 
                 onClick={handleSwap}
                 disabled={!amtNum || hasInvalidAmountFormat || isSwapping}
-                className="mt-6 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-lg font-bold tracking-wider shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
+                className="mt-2 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
                 {isSwapping ? "Swapping..." : "Swap"}
               </button>
@@ -279,7 +294,7 @@ const Swap = () => {
               Deposit <span className="text-purple-400 font-bold">PAS</span> and auto-match <span className="text-purple-400 font-bold">{tokenSymbol}</span> at the current market ratio to earn 0.3% of all trades on this pair.
             </p>
 
-            <div className="bg-[#1a1528]/80 rounded-2xl p-4 border border-white/5 hover:border-purple-500/20 transition-colors relative overflow-hidden">
+            <div className="bg-[#1a1528]/90 rounded-2xl p-4 border border-white/10 hover:border-purple-500/25 transition-colors relative overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
               <div className="flex justify-between mb-2 relative z-10">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">Deposit PAS</span>
                 <div className="flex items-center gap-2">
@@ -299,9 +314,9 @@ const Swap = () => {
                       setAmount(next);
                     }
                   }}
-                  className="w-full bg-transparent text-white text-3xl outline-none font-light placeholder-white/20"
+                  className="w-full bg-transparent text-white text-3xl outline-none font-light placeholder-white/20 caret-white"
                 />
-                <span className="ml-4 px-3 py-1.5 bg-[#0d0714] border border-white/10 rounded-lg text-white font-bold tracking-widest text-sm whitespace-nowrap">
+                <span className="ml-4 px-3 py-1.5 bg-[#0d0714] border border-white/15 rounded-lg text-white font-semibold tracking-wide text-sm whitespace-nowrap">
                   PAS
                 </span>
               </div>
@@ -313,7 +328,7 @@ const Swap = () => {
               </div>
             </div>
 
-            <div className="bg-[#1a1528]/40 rounded-2xl p-4 border border-white/5 relative overflow-hidden opacity-80">
+            <div className="bg-[#1a1528]/55 rounded-2xl p-4 border border-white/10 relative overflow-hidden opacity-95">
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">Required {tokenSymbol} (Auto-calculated)</span>
                 <span className="text-white/40 text-xs font-medium">Available: {tokenBalanceNum.toFixed(4)}</span>
@@ -322,7 +337,7 @@ const Swap = () => {
                 <span className="text-white/90 text-3xl font-light">
                   {liquidityPasAmount > 0 ? requiredTokenNum.toFixed(4) : "0.00"}
                 </span>
-                <span className="ml-4 px-3 py-1.5 bg-black/20 rounded-lg text-white/80 font-bold tracking-widest text-sm whitespace-nowrap">
+                <span className="ml-4 px-3 py-1.5 bg-black/25 border border-white/10 rounded-lg text-white/90 font-semibold tracking-wide text-sm whitespace-nowrap">
                   {tokenSymbol}
                 </span>
               </div>
@@ -341,7 +356,7 @@ const Swap = () => {
                   catch(e) { console.error(e) }
                 }}
                 disabled={!amtNum || hasInvalidAmountFormat || isApproving || !hasEnoughLiquidityBalances}
-                className="mt-6 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-lg font-bold tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
+                className="mt-2 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
                 {isApproving ? "Approving..." : "Approve Token"}
               </button>
@@ -349,7 +364,7 @@ const Swap = () => {
               <button 
                 onClick={handleAddLiquidity}
                 disabled={!amtNum || hasInvalidAmountFormat || isAddingLiq || !hasEnoughLiquidityBalances}
-                className="mt-6 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-lg font-bold tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
+                className="mt-2 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
                 {isAddingLiq ? "Adding Liquidity..." : "Add Liquidity"}
               </button>

@@ -128,7 +128,7 @@ const TransactionBox = () => {
                 if (isSafeDecimalInput(next)) {
                   setAmount(next)
                 }
-              }} className="w-0 min-w-0 flex-1 bg-transparent text-white text-3xl font-light outline-none" />
+              }} className="w-0 min-w-0 flex-1 bg-transparent text-white text-3xl font-light outline-none caret-white" />
               <div className="shrink-0 flex items-center space-x-2 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
                 <span className="text-white font-bold">{inputToken}</span>
               </div>

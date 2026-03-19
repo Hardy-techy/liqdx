@@ -26,21 +26,24 @@ const Pools = () => {
   const pools = [
     {
       tokenPair: "PT-gPAS / PAS",
-      address: shortAddr(SimplePoolContract.address),
+      address: SimplePoolContract.address,
+      addressDisplay: shortAddr(SimplePoolContract.address),
       liquidity: `${ptPool.totalLiq.toFixed(2)} PAS`,
       totalSwapVolume: `${ptPool.volume.toFixed(2)} PAS`,
       apy: "0.3% fee",
     },
     {
       tokenPair: "YT-gPAS / PAS",
-      address: shortAddr(YTPoolContract.address),
+      address: YTPoolContract.address,
+      addressDisplay: shortAddr(YTPoolContract.address),
       liquidity: `${ytPool.totalLiq.toFixed(2)} PAS`,
       totalSwapVolume: `${ytPool.volume.toFixed(2)} PAS`,
       apy: "0.3% fee",
     },
     {
       tokenPair: "gPAS / PAS",
-      address: shortAddr(gPASPoolContract.address),
+      address: gPASPoolContract.address,
+      addressDisplay: shortAddr(gPASPoolContract.address),
       liquidity: `${gPool.totalLiq.toFixed(2)} PAS`,
       totalSwapVolume: `${gPool.volume.toFixed(2)} PAS`,
       apy: "0.3% fee",
@@ -64,6 +67,7 @@ const Pools = () => {
                     key={i}
                     tokenPair={pool.tokenPair}
                     address={pool.address}
+                    addressDisplay={pool.addressDisplay}
                     liquidity={pool.liquidity}
                     totalSwapVolume={pool.totalSwapVolume}
                     apy={pool.apy}

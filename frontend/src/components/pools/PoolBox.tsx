@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 interface PoolBoxProps {
   tokenPair: string;
   address: string;
+  addressDisplay: string;
   liquidity: string;
   totalSwapVolume: string;
   apy: string;
 }
 
-const PoolBox = ({ tokenPair, address, liquidity, totalSwapVolume, apy }: PoolBoxProps) => {
+const PoolBox = ({ tokenPair, address, addressDisplay, liquidity, totalSwapVolume, apy }: PoolBoxProps) => {
   
   const pairSlug = tokenPair
     .replace(/\s+/g, "")
@@ -28,7 +29,7 @@ const PoolBox = ({ tokenPair, address, liquidity, totalSwapVolume, apy }: PoolBo
           <div className="flex justify-between border-b border-white/5 pb-2">
             <span className="text-white/60">Address</span>
             <span className="text-[#9333ea] underline underline-offset-2">
-              {address}
+              {addressDisplay}
             </span>
           </div>
           <div className="flex justify-between border-b border-white/5 pb-2">
