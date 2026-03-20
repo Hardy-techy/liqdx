@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react"
 import { useAccount } from "wagmi"
 import { parseEther } from "viem"
 import { GlowBackground } from "@components"
-import { formatInputAmount, isSafeDecimalInput } from "../../utils/amount"
+import { formatDisplayAmount, formatInputAmount, isSafeDecimalInput } from "../../utils/amount"
 import {
   usePASBalance,
   useStSttBalance,
@@ -118,7 +118,7 @@ const TransactionBox = () => {
                 {mode === "deposit" ? "Pay" : "Withdraw"}
               </span>
               <div className="flex items-center gap-2 text-xs text-white/50">
-                <span>Balance: {maxBalance.toLocaleString()}</span>
+                <span>Balance: {formatDisplayAmount(maxBalance)}</span>
                 <button type="button" onClick={() => setAmount(formatInputAmount(maxBalance))} className="text-[#9333ea] font-bold hover:text-[#7e22ce] uppercase tracking-wider">Max</button>
               </div>
             </div>
@@ -138,7 +138,7 @@ const TransactionBox = () => {
           <div className="bg-[#0d0714] border border-white/5 rounded-2xl p-5 flex flex-col gap-3">
             <span className="text-white/50 text-xs font-bold uppercase tracking-wider">Receive</span>
             <div className="flex items-center gap-3 min-w-0">
-              <span className="w-0 min-w-0 flex-1 text-3xl text-white font-light truncate">{result > 0 ? result.toLocaleString() : '0.0'}</span>
+              <span className="w-0 min-w-0 flex-1 text-3xl text-white font-light truncate">{result > 0 ? formatDisplayAmount(result) : '0.0'}</span>
               <div className="shrink-0 flex items-center space-x-2 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
                 <span className="text-white font-bold">{outputToken}</span>
               </div>

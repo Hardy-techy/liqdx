@@ -1,6 +1,11 @@
 export const formatInputAmount = (value: number) => {
   if (!Number.isFinite(value) || value <= 0) return "0";
-  return value.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 18 });
+  return value.toLocaleString("en-US", { useGrouping: false, maximumFractionDigits: 6 });
+};
+
+export const formatDisplayAmount = (value: number, maxFractionDigits = 6) => {
+  if (!Number.isFinite(value) || value <= 0) return "0";
+  return value.toLocaleString("en-US", { useGrouping: true, maximumFractionDigits: maxFractionDigits });
 };
 
 export const isSafeDecimalInput = (value: string) => {

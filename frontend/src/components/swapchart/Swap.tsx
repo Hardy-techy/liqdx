@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAccount, useReadContract } from "wagmi";
 import { parseEther } from "viem";
 import { toast } from "react-hot-toast";
-import { formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
+import { formatDisplayAmount, formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
 import { 
   PTContract, YTContract, gPASContract, 
   SimplePoolContract, YTPoolContract, gPASPoolContract 
@@ -204,7 +204,7 @@ const Swap = () => {
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">You pay</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-white/40 text-xs font-medium">Bal: {isSwappingPAS ? pasBalance.toFixed(4) : tokenBalanceNum.toFixed(4)}</span>
+                  <span className="text-white/40 text-xs font-medium">Bal: {formatDisplayAmount(isSwappingPAS ? pasBalance : tokenBalanceNum)}</span>
                   <button type="button" onClick={handleMaxSwapAmount} className="text-purple-400 font-bold tracking-wider uppercase text-[10px] hover:text-purple-300">Max</button>
                 </div>
               </div>
@@ -241,11 +241,11 @@ const Swap = () => {
             <div className="bg-[#1a1528]/70 rounded-2xl p-4 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">You receive</span>
-                <span className="text-white/40 text-xs font-medium">Bal: {!isSwappingPAS ? pasBalance.toFixed(4) : tokenBalanceNum.toFixed(4)}</span>
+                <span className="text-white/40 text-xs font-medium">Bal: {formatDisplayAmount(!isSwappingPAS ? pasBalance : tokenBalanceNum)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-white/90 text-3xl font-light">
-                  {estimatedReceive > 0 ? estimatedReceive.toFixed(4) : "0.00"}
+                  {estimatedReceive > 0 ? formatDisplayAmount(estimatedReceive) : "0.00"}
                 </span>
                 <span className="ml-4 px-3 py-1.5 bg-black/25 border border-white/10 rounded-lg text-white font-semibold tracking-wide text-sm whitespace-nowrap">
                   {!isSwappingPAS ? "PAS" : tokenSymbol}
@@ -256,7 +256,7 @@ const Swap = () => {
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                 <p className="text-[11px] uppercase tracking-[0.14em] text-white/45">Est. Price</p>
-                <p className="mt-1 text-sm text-white/85">1 {tokenSymbol} = {currentPrice > 0 ? currentPrice.toFixed(4) : "0.0000"} PAS</p>
+                <p className="mt-1 text-sm text-white/85">1 {tokenSymbol} = {currentPrice > 0 ? formatDisplayAmount(currentPrice, 4) : "0.0000"} PAS</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-black/20 p-3">
                 <p className="text-[11px] uppercase tracking-[0.14em] text-white/45">Trading Fee</p>
@@ -298,7 +298,7 @@ const Swap = () => {
               <div className="flex justify-between mb-2 relative z-10">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">Deposit PAS</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-white/40 text-xs font-medium">Available: {pasBalance.toFixed(4)}</span>
+                  <span className="text-white/40 text-xs font-medium">Available: {formatDisplayAmount(pasBalance)}</span>
                   <button type="button" onClick={handleMaxLiquidityPas} className="text-purple-400 font-bold tracking-wider uppercase text-[10px] hover:text-purple-300">Max</button>
                 </div>
               </div>
@@ -331,11 +331,11 @@ const Swap = () => {
             <div className="bg-[#1a1528]/55 rounded-2xl p-4 border border-white/10 relative overflow-hidden opacity-95">
               <div className="flex justify-between mb-2">
                 <span className="text-white/50 text-xs font-semibold uppercase tracking-wider">Required {tokenSymbol} (Auto-calculated)</span>
-                <span className="text-white/40 text-xs font-medium">Available: {tokenBalanceNum.toFixed(4)}</span>
+                <span className="text-white/40 text-xs font-medium">Available: {formatDisplayAmount(tokenBalanceNum)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-white/90 text-3xl font-light">
-                  {liquidityPasAmount > 0 ? requiredTokenNum.toFixed(4) : "0.00"}
+                  {liquidityPasAmount > 0 ? formatDisplayAmount(requiredTokenNum) : "0.00"}
                 </span>
                 <span className="ml-4 px-3 py-1.5 bg-black/25 border border-white/10 rounded-lg text-white/90 font-semibold tracking-wide text-sm whitespace-nowrap">
                   {tokenSymbol}

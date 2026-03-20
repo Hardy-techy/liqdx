@@ -146,13 +146,40 @@ export const useApproveStPAS = () => {
 
 // Split gPAS -> PT + YT
 export const useSplit = () => {
+  const { address } = useAccount()
+  const publicClient = usePublicClient()
   const { writeContractAsync, data: hash, error, isPending } = useWriteContract()
 
   const split = async (amount: bigint) => {
+    if (amount <= 0n) throw new Error("Amount must be greater than 0")
+    if (!address) throw new Error("Wallet not connected")
+    if (!publicClient) throw new Error("Public client unavailable")
+
+    let estimatedGas: bigint
+    try {
+      estimatedGas = await publicClient.estimateContractGas({
+        ...SplitterContract,
+        functionName: "split",
+        args: [amount],
+        account: address,
+      })
+    } catch (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase()
+      if (message.includes("allowance") || message.includes("insufficient")) {
+        throw new Error("Approve enough gPAS before splitting.")
+      }
+      throw new Error("Unable to prepare split transaction. Check amount and approvals, then try again.")
+    }
+
+    const networkGasPrice = await publicClient.getGasPrice()
+    const paddedGas = (estimatedGas * 120n) / 100n
+
     return await writeContractAsync({
       ...SplitterContract,
       functionName: "split",
       args: [amount],
+      gas: paddedGas,
+      gasPrice: networkGasPrice,
     })
   }
 
@@ -163,13 +190,40 @@ export const useSplit = () => {
 
 // Recombine PT + YT -> gPAS
 export const useRecombine = () => {
+  const { address } = useAccount()
+  const publicClient = usePublicClient()
   const { writeContractAsync, data: hash, error, isPending } = useWriteContract()
 
   const recombine = async (amount: bigint) => {
+    if (amount <= 0n) throw new Error("Amount must be greater than 0")
+    if (!address) throw new Error("Wallet not connected")
+    if (!publicClient) throw new Error("Public client unavailable")
+
+    let estimatedGas: bigint
+    try {
+      estimatedGas = await publicClient.estimateContractGas({
+        ...SplitterContract,
+        functionName: "recombine",
+        args: [amount],
+        account: address,
+      })
+    } catch (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : String(err).toLowerCase()
+      if (message.includes("not enough pt") || message.includes("not enough yt")) {
+        throw new Error("Not enough PT/YT to recombine this amount.")
+      }
+      throw new Error("Unable to prepare recombine transaction. Check balances and try again.")
+    }
+
+    const networkGasPrice = await publicClient.getGasPrice()
+    const paddedGas = (estimatedGas * 120n) / 100n
+
     return await writeContractAsync({
       ...SplitterContract,
       functionName: "recombine",
       args: [amount],
+      gas: paddedGas,
+      gasPrice: networkGasPrice,
     })
   }
 

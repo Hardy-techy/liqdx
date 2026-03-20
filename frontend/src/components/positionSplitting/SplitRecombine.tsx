@@ -7,7 +7,7 @@ import { useStSttBalance, usePTBalance, useYTBalance } from "@hooks/read"
 import { useApproveToken, useSplit, useRecombine } from "@hooks/write"
 import { gPASContract, PTContract, YTContract, SplitterContract } from "@contracts"
 import { parseEther } from "viem";
-import { formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
+import { formatDisplayAmount, formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
 
 interface TokenOption {
   coin: string;
@@ -62,6 +62,14 @@ const SplitRecombine = () => {
 
   const hasInvalidAmountFormat = amount !== "" && !isSafeDecimalInput(amount);
   const inputAmount = hasInvalidAmountFormat ? 0 : parseFloat(amount) || 0;
+  const inputAmountWei = (() => {
+    if (!amount || hasInvalidAmountFormat) return 0n
+    try {
+      return parseEther(amount)
+    } catch {
+      return 0n
+    }
+  })()
   
   // Allowances
   const { data: gPASAllowanceRaw, refetch: refetchGPASAllowance } = useReadContract({
@@ -83,13 +91,17 @@ const SplitRecombine = () => {
     query: { enabled: !!walletAddress }
   })
   
-  const gPASAllowance = Number(gPASAllowanceRaw || 0) / 1e18;
-  const ptAllowance = Number(ptAllowanceRaw || 0) / 1e18;
-  const ytAllowance = Number(ytAllowanceRaw || 0) / 1e18;
+  const gPASAllowanceWei = typeof gPASAllowanceRaw === "bigint" ? gPASAllowanceRaw : 0n
+  const ptAllowanceWei = typeof ptAllowanceRaw === "bigint" ? ptAllowanceRaw : 0n
+  const ytAllowanceWei = typeof ytAllowanceRaw === "bigint" ? ytAllowanceRaw : 0n
 
-  const needsGPASApproval = mode === "split" && inputAmount > gPASAllowance;
-  const needsPTApproval = mode === "recombine" && inputAmount > ptAllowance;
-  const needsYTApproval = mode === "recombine" && !needsPTApproval && inputAmount > ytAllowance;
+  const gPASAllowance = Number(gPASAllowanceWei) / 1e18;
+  const ptAllowance = Number(ptAllowanceWei) / 1e18;
+  const ytAllowance = Number(ytAllowanceWei) / 1e18;
+
+  const needsGPASApproval = mode === "split" && inputAmountWei > gPASAllowanceWei;
+  const needsPTApproval = mode === "recombine" && inputAmountWei > ptAllowanceWei;
+  const needsYTApproval = mode === "recombine" && !needsPTApproval && inputAmountWei > ytAllowanceWei;
 
   const isDisabled =
     !amount || hasInvalidAmountFormat || isNaN(inputAmount) || inputAmount <= 0 || inputAmount > maxBalance
@@ -98,8 +110,8 @@ const SplitRecombine = () => {
   const result =
     !isNaN(inputAmount) && inputAmount > 0
       ? mode === "split"
-        ? `${inputAmount} PT + ${inputAmount} YT`
-        : `${inputAmount} gPAS`
+        ? `${formatDisplayAmount(inputAmount)} PT + ${formatDisplayAmount(inputAmount)} YT`
+        : `${formatDisplayAmount(inputAmount)} gPAS`
       : mode === "split"
       ? "0 PT + 0 YT"
       : "0 gPAS";
@@ -113,15 +125,24 @@ const SplitRecombine = () => {
         return
       }
 
-      const amountWei = parseEther(amount)
+      if (inputAmountWei <= 0n) {
+        toast.error("Enter a valid amount")
+        return
+      }
+
       if (mode === "split") {
-        await split(amountWei)
+        if (inputAmountWei > gPASAllowanceWei) {
+          toast.error("Approve gPAS before splitting")
+          return
+        }
+        await split(inputAmountWei)
       } else {
-        await recombine(amountWei)
+        await recombine(inputAmountWei)
       }
     } catch (err) {
       console.error("Transaction failed:", err)
-      toast.error("Transaction failed")
+      const message = err instanceof Error ? err.message : "Transaction failed"
+      toast.error(message)
     }
   }
 
@@ -299,7 +320,7 @@ const SplitRecombine = () => {
           />
           <div className="flex items-center gap-5 text-xs text-gray-500 mt-2">
             <span className="text-white/40">
-              Balance: {maxBalance.toLocaleString()} {inputToken}
+              Balance: {formatDisplayAmount(maxBalance)} {inputToken}
             </span>
             <button
               type="button"
@@ -322,7 +343,13 @@ const SplitRecombine = () => {
       {needsGPASApproval ? (
         <button
           onClick={async () => {
-            try { await approveGPAS(SplitterContract.address, parseEther(amount)) }
+            try {
+              if (inputAmountWei <= 0n) {
+                toast.error("Enter a valid amount")
+                return
+              }
+              await approveGPAS(SplitterContract.address, inputAmountWei)
+            }
             catch(e) { console.error(e) }
           }}
           disabled={isDisabled || isApproveGPASPending}
@@ -333,7 +360,13 @@ const SplitRecombine = () => {
       ) : needsPTApproval ? (
         <button
           onClick={async () => {
-            try { await approvePT(SplitterContract.address, parseEther(amount)) }
+            try {
+              if (inputAmountWei <= 0n) {
+                toast.error("Enter a valid amount")
+                return
+              }
+              await approvePT(SplitterContract.address, inputAmountWei)
+            }
             catch(e) { console.error(e) }
           }}
           disabled={isDisabled || isApprovePTPending}
@@ -344,7 +377,13 @@ const SplitRecombine = () => {
       ) : needsYTApproval ? (
         <button
           onClick={async () => {
-            try { await approveYT(SplitterContract.address, parseEther(amount)) }
+            try {
+              if (inputAmountWei <= 0n) {
+                toast.error("Enter a valid amount")
+                return
+              }
+              await approveYT(SplitterContract.address, inputAmountWei)
+            }
             catch(e) { console.error(e) }
           }}
           disabled={isDisabled || isApproveYTPending}
