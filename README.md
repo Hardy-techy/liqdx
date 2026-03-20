@@ -2,6 +2,10 @@
 
 Lidqx is a yield protocol where users deposit into a vault, receive a yield-bearing position, and split that position into principal and yield components for different strategy profiles.
 
+## Live App
+
+- https://liqdx.app
+
 ## Why gPAS Uses Exchange-Rate Yield
 
 - gPAS does not increase token count over time.
