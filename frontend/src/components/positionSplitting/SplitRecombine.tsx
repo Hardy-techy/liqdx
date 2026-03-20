@@ -95,10 +95,6 @@ const SplitRecombine = () => {
   const ptAllowanceWei = typeof ptAllowanceRaw === "bigint" ? ptAllowanceRaw : 0n
   const ytAllowanceWei = typeof ytAllowanceRaw === "bigint" ? ytAllowanceRaw : 0n
 
-  const gPASAllowance = Number(gPASAllowanceWei) / 1e18;
-  const ptAllowance = Number(ptAllowanceWei) / 1e18;
-  const ytAllowance = Number(ytAllowanceWei) / 1e18;
-
   const needsGPASApproval = mode === "split" && inputAmountWei > gPASAllowanceWei;
   const needsPTApproval = mode === "recombine" && inputAmountWei > ptAllowanceWei;
   const needsYTApproval = mode === "recombine" && !needsPTApproval && inputAmountWei > ytAllowanceWei;
