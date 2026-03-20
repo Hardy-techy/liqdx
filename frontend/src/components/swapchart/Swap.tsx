@@ -70,9 +70,13 @@ const Swap = () => {
   }
 
   // Wagmi Hooks
-  const { approve, isPending: isApproving, isSuccess: isApproveSuccess } = useApproveToken(tokenContract.address, tokenContract.abi);
-  const { swapPASforToken, swapTokenForPAS, isPending: isSwapping, isSuccess: isSwapSuccess } = useSwap(poolContract.address, poolContract.abi);
-  const { addLiquidity, isPending: isAddingLiq, isSuccess: isAddLiqSuccess } = useAddLiquidity(poolContract.address, poolContract.abi);
+  const { approve, isPending: isApproving, isLoading: isApproveLoading, isSuccess: isApproveSuccess } = useApproveToken(tokenContract.address, tokenContract.abi);
+  const { swapPASforToken, swapTokenForPAS, isPending: isSwapping, isLoading: isSwapLoading, isSuccess: isSwapSuccess } = useSwap(poolContract.address, poolContract.abi);
+  const { addLiquidity, isPending: isAddingLiq, isLoading: isAddLiqLoading, isSuccess: isAddLiqSuccess } = useAddLiquidity(poolContract.address, poolContract.abi);
+
+  const isApprovingTx = isApproving || isApproveLoading;
+  const isSwappingTx = isSwapping || isSwapLoading;
+  const isAddingLiqTx = isAddingLiq || isAddLiqLoading;
 
   // Check Token Allowance for Swapping Token->PAS or Adding Liquidity
   const { data: allowanceRaw, refetch: refetchAllowance } = useReadContract({
@@ -270,18 +274,18 @@ const Swap = () => {
                   try { await approve(poolContract.address, parseEther(amount)) } 
                   catch(e) { console.error(e) }
                 }}
-                disabled={!amtNum || hasInvalidAmountFormat || isApproving}
+                disabled={!amtNum || hasInvalidAmountFormat || isApprovingTx}
                 className="mt-2 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
-                {isApproving ? "Approving..." : "Approve Token"}
+                {isApprovingTx ? "Approving..." : "Approve Token"}
               </button>
             ) : (
               <button 
                 onClick={handleSwap}
-                disabled={!amtNum || hasInvalidAmountFormat || isSwapping}
+                disabled={!amtNum || hasInvalidAmountFormat || isSwappingTx}
                 className="mt-2 w-full py-4 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
-                {isSwapping ? "Swapping..." : "Swap"}
+                {isSwappingTx ? "Swapping..." : "Swap"}
               </button>
             )}
           </div>
@@ -355,18 +359,18 @@ const Swap = () => {
                   try { await approve(poolContract.address, parseEther(requiredTokenNum.toFixed(18))) } 
                   catch(e) { console.error(e) }
                 }}
-                disabled={!amtNum || hasInvalidAmountFormat || isApproving || !hasEnoughLiquidityBalances}
+                disabled={!amtNum || hasInvalidAmountFormat || isApprovingTx || !hasEnoughLiquidityBalances}
                 className="mt-2 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
-                {isApproving ? "Approving..." : "Approve Token"}
+                {isApprovingTx ? "Approving..." : "Approve Token"}
               </button>
             ) : (
               <button 
                 onClick={handleAddLiquidity}
-                disabled={!amtNum || hasInvalidAmountFormat || isAddingLiq || !hasEnoughLiquidityBalances}
+                disabled={!amtNum || hasInvalidAmountFormat || isAddingLiqTx || !hasEnoughLiquidityBalances}
                 className="mt-2 w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-700 hover:from-emerald-400 hover:to-emerald-600 rounded-xl text-white text-base font-semibold tracking-[0.12em] shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed uppercase"
               >
-                {isAddingLiq ? "Adding Liquidity..." : "Add Liquidity"}
+                {isAddingLiqTx ? "Adding Liquidity..." : "Add Liquidity"}
               </button>
             )}
           </div>

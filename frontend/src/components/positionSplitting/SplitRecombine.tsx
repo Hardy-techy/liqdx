@@ -7,7 +7,7 @@ import { useStSttBalance, usePTBalance, useYTBalance } from "@hooks/read"
 import { useApproveToken, useSplit, useRecombine } from "@hooks/write"
 import { gPASContract, PTContract, YTContract, SplitterContract } from "@contracts"
 import { parseEther } from "viem";
-import { formatDisplayAmount, formatInputAmount, isSafeDecimalInput } from "../../utils/amount";
+import { formatDisplayAmount, formatInputAmountFromWei, isSafeDecimalInput } from "../../utils/amount";
 
 interface TokenOption {
   coin: string;
@@ -31,16 +31,19 @@ const SplitRecombine = () => {
   const {
     approve: approveGPAS,
     isPending: isApproveGPASPending,
+    isLoading: isApproveGPASLoading,
     isSuccess: isApproveGPASSuccess,
   } = useApproveToken(gPASContract.address, gPASContract.abi);
   const {
     approve: approvePT,
     isPending: isApprovePTPending,
+    isLoading: isApprovePTLoading,
     isSuccess: isApprovePTSuccess,
   } = useApproveToken(PTContract.address, PTContract.abi);
   const {
     approve: approveYT,
     isPending: isApproveYTPending,
+    isLoading: isApproveYTLoading,
     isSuccess: isApproveYTSuccess,
   } = useApproveToken(YTContract.address, YTContract.abi);
 
@@ -57,8 +60,15 @@ const SplitRecombine = () => {
   const { data: YTBalanceRaw, refetch: refetchYTBalance } = useYTBalance(walletAddress)
   const YTBalance = YTBalanceRaw ? Number(YTBalanceRaw) / 1e18 : 0
 
+  const gPASBalanceWei = typeof gPASBalanceRaw === "bigint" ? gPASBalanceRaw : 0n
+  const PTBalanceWei = typeof PTBalanceRaw === "bigint" ? PTBalanceRaw : 0n
+  const YTBalanceWei = typeof YTBalanceRaw === "bigint" ? YTBalanceRaw : 0n
+
   const maxRecombine = Math.min(PTBalance, YTBalance)
   const maxBalance = mode === "split" ? stSttBalance : maxRecombine
+  const maxBalanceWei = mode === "split"
+    ? gPASBalanceWei
+    : (PTBalanceWei < YTBalanceWei ? PTBalanceWei : YTBalanceWei)
 
   const hasInvalidAmountFormat = amount !== "" && !isSafeDecimalInput(amount);
   const inputAmount = hasInvalidAmountFormat ? 0 : parseFloat(amount) || 0;
@@ -100,7 +110,7 @@ const SplitRecombine = () => {
   const needsYTApproval = mode === "recombine" && !needsPTApproval && inputAmountWei > ytAllowanceWei;
 
   const isDisabled =
-    !amount || hasInvalidAmountFormat || isNaN(inputAmount) || inputAmount <= 0 || inputAmount > maxBalance
+    !amount || hasInvalidAmountFormat || inputAmountWei <= 0n || inputAmountWei > maxBalanceWei
 
   // Preview result
   const result =
@@ -320,7 +330,7 @@ const SplitRecombine = () => {
             </span>
             <button
               type="button"
-              onClick={() => setAmount(formatInputAmount(maxBalance))}
+              onClick={() => setAmount(formatInputAmountFromWei(maxBalanceWei))}
               className="text-purple-400 font-bold tracking-wider uppercase hover:text-purple-300"
             >
               Max
@@ -348,10 +358,10 @@ const SplitRecombine = () => {
             }
             catch(e) { console.error(e) }
           }}
-          disabled={isDisabled || isApproveGPASPending}
+          disabled={isDisabled || isApproveGPASPending || isApproveGPASLoading}
           className="mt-4 py-4 rounded-xl text-lg font-bold tracking-wider uppercase bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed z-10"
         >
-          {isApproveGPASPending ? "Approving..." : "Approve gPAS"}
+          {(isApproveGPASPending || isApproveGPASLoading) ? "Approving..." : "Approve gPAS"}
         </button>
       ) : needsPTApproval ? (
         <button
@@ -365,10 +375,10 @@ const SplitRecombine = () => {
             }
             catch(e) { console.error(e) }
           }}
-          disabled={isDisabled || isApprovePTPending}
+          disabled={isDisabled || isApprovePTPending || isApprovePTLoading}
           className="mt-4 py-4 rounded-xl text-lg font-bold tracking-wider uppercase bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed z-10"
         >
-          {isApprovePTPending ? "Approving..." : "Approve PT"}
+          {(isApprovePTPending || isApprovePTLoading) ? "Approving..." : "Approve PT"}
         </button>
       ) : needsYTApproval ? (
         <button
@@ -382,10 +392,10 @@ const SplitRecombine = () => {
             }
             catch(e) { console.error(e) }
           }}
-          disabled={isDisabled || isApproveYTPending}
+          disabled={isDisabled || isApproveYTPending || isApproveYTLoading}
           className="mt-4 py-4 rounded-xl text-lg font-bold tracking-wider uppercase bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-400 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed z-10"
         >
-          {isApproveYTPending ? "Approving..." : "Approve YT"}
+          {(isApproveYTPending || isApproveYTLoading) ? "Approving..." : "Approve YT"}
         </button>
       ) : (
         <button
